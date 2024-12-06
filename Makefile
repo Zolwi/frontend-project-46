@@ -1,6 +1,6 @@
 install:
 	npm ci
-linit:
-	npm eslint .
-linit-fix:
-	npm eslint --fix .
+lint:
+	npx eslint .
+lint-fix:
+	npx eslint . --fix .
