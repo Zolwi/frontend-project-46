@@ -76,3 +76,179 @@ describe('tree structures', () => {
     expect(genDiff(getFixturePath(file1), getFixturePath(file2))).toEqual(result);
   });
 });
+
+describe('new formatters', () => {
+  const plainResult = `Property 'common.follow' was added with value: false
+Property 'common.setting2' was removed
+Property 'common.setting3' was updated. From true to null
+Property 'common.setting4' was added with value: 'blah blah'
+Property 'common.setting5' was added with value: [complex value]
+Property 'common.setting6.doge.wow' was updated. From '' to 'so much'
+Property 'common.setting6.ops' was added with value: 'vops'
+Property 'group1.baz' was updated. From 'bas' to 'bars'
+Property 'group1.nest' was updated. From [complex value] to 'str'
+Property 'group2' was removed
+Property 'group3' was added with value: [complex value]`;
+  test('plain', () => {
+    const file1 = 'tree1.json';
+    const file2 = 'tree2.json';
+    expect(genDiff(getFixturePath(file1), getFixturePath(file2), 'plain')).toEqual(plainResult);
+  });
+  const jsonResult = [
+    {
+      key: 'common',
+      change: null,
+      value: [
+        {
+          key: 'follow',
+          change: 'added',
+          value: false,
+        },
+        {
+          key: 'setting1',
+          change: null,
+          value: 'Value 1',
+        },
+        {
+          key: 'setting2',
+          change: 'removed',
+          value: 200,
+        },
+        {
+          key: 'setting3',
+          change: 'updated',
+          oldValue: true,
+          value: null,
+        },
+        {
+          key: 'setting4',
+          change: 'added',
+          value: 'blah blah',
+        },
+        {
+          key: 'setting5',
+          change: 'added',
+          value: [
+            {
+              key: 'key5',
+              change: null,
+              value: 'value5',
+            },
+          ],
+        },
+        {
+          key: 'setting6',
+          change: null,
+          value: [
+            {
+              key: 'doge',
+              change: null,
+              value: [
+                {
+                  key: 'wow',
+                  change: 'updated',
+                  oldValue: '',
+                  value: 'so much',
+                },
+              ],
+            },
+            {
+              key: 'key',
+              change: null,
+              value: 'value',
+            },
+            {
+              key: 'ops',
+              change: 'added',
+              value: 'vops',
+            },
+          ],
+        },
+      ],
+    },
+    {
+      key: 'group1',
+      change: null,
+      value: [
+        {
+          key: 'baz',
+          change: 'updated',
+          oldValue: 'bas',
+          value: 'bars',
+        },
+        {
+          key: 'foo',
+          change: null,
+          value: 'bar',
+        },
+        {
+          key: 'nest',
+          change: 'updated',
+          oldValue: [
+            {
+              key: 'key',
+              change: null,
+              value: 'value',
+            },
+          ],
+          value: 'str',
+        },
+      ],
+    },
+    {
+      key: 'group2',
+      change: 'removed',
+      value: [
+        {
+          key: 'abc',
+          change: null,
+          value: 12345,
+        },
+        {
+          key: 'deep',
+          change: null,
+          value: [
+            {
+              key: 'id',
+              change: null,
+              value: 45,
+            },
+          ],
+        },
+      ],
+    },
+    {
+      key: 'group3',
+      change: 'added',
+      value: [
+        {
+          key: 'deep',
+          change: null,
+          value: [
+            {
+              key: 'id',
+              change: null,
+              value: [
+                {
+                  key: 'number',
+                  change: null,
+                  value: 45,
+                },
+              ],
+            },
+          ],
+        },
+        {
+          key: 'fee',
+          change: null,
+          value: 100500,
+        },
+      ],
+    },
+  ];
+  test('json', () => {
+    const file1 = 'tree1.json';
+    const file2 = 'tree2.json';
+    expect(genDiff(getFixturePath(file1), getFixturePath(file2), 'json')).toEqual(JSON.stringify(jsonResult));
+  });
+});
