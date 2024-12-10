@@ -10,7 +10,7 @@ export default (formatName) => {
       return stringifyPlain;
     case 'json':
       return stringifyJSON;
-    default: s;
+    default:
       throw new Error('Unknown formatter');
   }
 };
